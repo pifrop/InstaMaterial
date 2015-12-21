@@ -2,23 +2,33 @@ package io.github.froger.instamaterial.ui.activity;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.NonNull;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.View;
+import android.view.animation.AccelerateInterpolator;
+import android.view.animation.DecelerateInterpolator;
 import android.view.animation.OvershootInterpolator;
 
-import butterknife.InjectView;
+import java.util.List;
+
+import butterknife.Bind;
 import butterknife.OnClick;
-import io.github.froger.instamaterial.ui.adapter.FeedAdapter;
+import hugo.weaving.DebugLog;
 import io.github.froger.instamaterial.R;
 import io.github.froger.instamaterial.Utils;
+import io.github.froger.instamaterial.ui.adapter.FeedAdapter;
+import io.github.froger.instamaterial.ui.adapter.FeedItemAnimator;
 import io.github.froger.instamaterial.ui.view.FeedContextMenu;
 import io.github.froger.instamaterial.ui.view.FeedContextMenuManager;
 
@@ -30,11 +40,11 @@ public class MainActivity extends BaseDrawerActivity implements FeedAdapter.OnFe
     private static final int ANIM_DURATION_TOOLBAR = 300;
     private static final int ANIM_DURATION_FAB = 400;
 
-    @InjectView(R.id.rvFeed)
+    @Bind(R.id.rvFeed)
     RecyclerView rvFeed;
-    @InjectView(R.id.btnCreate)
+    @Bind(R.id.btnCreate)
     FloatingActionButton fabCreate;
-    @InjectView(R.id.content)
+    @Bind(R.id.content)
     CoordinatorLayout clContent;
 
     private FeedAdapter feedAdapter;
@@ -72,6 +82,7 @@ public class MainActivity extends BaseDrawerActivity implements FeedAdapter.OnFe
                 FeedContextMenuManager.getInstance().onScrolled(recyclerView, dx, dy);
             }
         });
+        rvFeed.setItemAnimator(new FeedItemAnimator());
     }
 
     @Override
